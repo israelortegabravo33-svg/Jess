@@ -1,20 +1,20 @@
-iniciar
 import os
 from telegram.ext import ApplicationBuilder, MessageHandler, filters
-import google.generativeai as genai
+from google import genai
 
 TOKEN = os.environ.get("TELEGRAM_TOKEN")
 API_KEY = os.environ.get("GOOGLE_API_KEY")
 
-genai.configure(api_key=API_KEY)
-
-# Usamos gemini-1.5-flash pero con la sintaxis correcta que exige la API actual
-model = genai.GenerativeModel("gemini-1.5-flash")
-chat = model.start_chat(history=[])
+# Inicializamos el cliente oficial nuevo
+client = genai.Client(api_key=API_KEY)
 
 async def handle_message(update, context):
     try:
-        response = chat.send_message(update.message.text)
+        # Usamos gemini-2.5-flash (o gemini-1.5-flash) con la nueva estructura
+        response = client.models.generate_content(
+            model='gemini-2.5-flash',
+            contents=update.message.text,
+        )
         await update.message.reply_text(response.text)
     except Exception as e:
         await update.message.reply_text(f"Error en circuitos: {e}")
@@ -24,4 +24,3 @@ if __name__ == '__main__':
     app = ApplicationBuilder().token(TOKEN).build()
     app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
     app.run_polling()
-
