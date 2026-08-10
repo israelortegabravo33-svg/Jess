@@ -7,8 +7,8 @@ API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 genai.configure(api_key=API_KEY)
 
-# Usamos gemini-pro para garantizar compatibilidad total
-model = genai.GenerativeModel("gemini-pro")
+# Usamos gemini-1.5-flash pero con la sintaxis correcta que exige la API actual
+model = genai.GenerativeModel("gemini-1.5-flash")
 chat = model.start_chat(history=[])
 
 async def handle_message(update, context):
