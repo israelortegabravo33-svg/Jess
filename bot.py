@@ -10,7 +10,7 @@ client = genai.Client(api_key=API_KEY)
 async def handle_message(update, context):
     try:
         response = client.models.generate_content(
-            model='gemini-2.0-flash',
+            model='gemini-2.5',
             contents=update.message.text,
         )
         await update.message.reply_text(response.text)
